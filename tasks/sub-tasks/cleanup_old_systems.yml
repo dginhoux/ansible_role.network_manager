@@ -1,0 +1,54 @@
+---
+- name: cleanup default debian network configuration
+  block:
+    - name: identify /etc/network/interfaces.d/* for cleanup
+      find:
+        paths: /etc/network/interfaces.d
+        patterns: "*"
+      register: netcfg_files_to_delete
+    - name: cleanup /etc/network/interfaces.d/*
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ netcfg_files_to_delete.files }}"
+    - name: create default /etc/network/interfaces
+      copy:
+        dest: "/etc/network/interfaces"
+        content: |
+          # ansible_managed
+          auto lo
+          iface lo inet loopback
+          source /etc/network/interfaces.d/*
+  when: ansible_os_family == "Debian"
+
+- name: cleanup default redhat network configuration
+  block:
+    - name: identify /etc/network/interfaces.d/ifcfg-* for cleanup
+      find:
+        paths: /etc/sysconfig/network-scripts
+        patterns: "ifcfg-*"
+      register: ifcfg_files_to_delete
+    - name: cleanup /etc/network/interfaces.d/ifcfg-*
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ ifcfg_files_to_delete.files }}"
+    - name: identify /etc/network/interfaces.d/route-* for cleanup
+      find:
+        paths: /etc/sysconfig/network-scripts
+        patterns: "route-*"
+      register: route_files_to_delete
+    - name: cleanup /etc/network/interfaces.d/route-*
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ route_files_to_delete.files }}"
+    - name: create default /etc/sysconfig/network
+      copy:
+        dest: "/etc/sysconfig/network"
+        content: |
+          # ansible_managed
+          NETWORKING=yes
+          HOSTNAME={{ inventory_hostname }}
+          NOZEROCONF=yes
+  when: ansible_os_family == "RedHat"

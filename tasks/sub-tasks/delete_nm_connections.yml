@@ -1,0 +1,6 @@
+---
+
+- name: "delete nm connection {{ conn.conn_name }}"
+  community.general.nmcli:
+    conn_name: "{{ conn.conn_name }}"
+    state: absent

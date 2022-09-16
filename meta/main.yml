@@ -1,0 +1,27 @@
+---
+galaxy_info:
+  role_name: fstab
+  description: configure fstab
+  author: dginhoux
+  company: ginhouxnet
+  license: BSD
+  min_ansible_version: "2.12"
+  platforms:
+    - name: Debian
+      versions:
+        - buster
+        - bullseye
+    - name: Fedora
+      versions:
+        - "33"
+        - "34"
+        - "35"
+        - "36"
+    - name: EL
+      versions:
+        - "7"
+        - "8"
+  galaxy_tags:
+    - fstab
+
+dependencies: []

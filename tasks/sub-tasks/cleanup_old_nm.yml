@@ -1,0 +1,16 @@
+---
+- name: identify /etc/NetworkManager/system-connections/*.nmconnection for cleanup
+  find:
+    paths: /etc/NetworkManager/system-connections/
+    patterns: "*.nmconnection"
+  register: nmcli_files_to_delete
+
+- name: cleanup /etc/NetworkManager/system-connections/*.nmconnection
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ nmcli_files_to_delete.files }}"
+
+- name: nmcli connection reload
+  shell:
+    cmd: nmcli connection reload

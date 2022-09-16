@@ -1,0 +1,14 @@
+---
+
+- name: remove needed packages
+  package:
+    name: "{{ item }}"
+    state: absent
+  loop: "{{ network_manager_packages_removals_list | flatten }}"
+
+
+- name: install needed packages
+  package:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ network_manager_packages_install_list | flatten }}"

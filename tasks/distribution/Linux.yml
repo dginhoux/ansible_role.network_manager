@@ -1,0 +1,57 @@
+---
+- name: generate NetworkManager config
+  block:
+    - name: load task for packages
+      include_tasks:
+        file: tasks/sub-tasks/packages.yml
+
+    - name: load task for clean old conf systems
+      include_tasks:
+        file: tasks/sub-tasks/cleanup_old_systems.yml
+      when: network_manager_cleanup_old_systems | bool
+
+    - name: start NetworkManager
+      service:
+        name: NetworkManager
+        state: started
+        enabled: true
+
+    - name: load tasks for delete nm connection
+      include_tasks:
+        file: tasks/sub-tasks/delete_nm_connections.yml
+      loop: "{{ network_manager_connections | flatten }}"
+      loop_control:
+        loop_var: conn
+      when: >
+        network_manager_connections is iterable
+        and
+        network_manager_connections | length > 0
+        and
+        conn.state == "absent"
+
+    - name: load tasks for create nm connection
+      include_tasks:
+        file: tasks/sub-tasks/create_nm_connections.yml
+      loop: "{{ network_manager_connections | flatten }}"
+      loop_control:
+        loop_var: conn
+      when: >
+        network_manager_connections is iterable
+        and
+        network_manager_connections | length > 0
+        and
+        conn.state == "present"
+  when: >
+    network_manager_configure is defined
+    and
+    network_manager_configure == "generate"
+
+- name: cleanup NetworkManager config
+  block:
+    - name: load task for clean conf nm
+      include_tasks:
+        file: tasks/sub-tasks/cleanup_old_nm.yml
+  when: >
+    network_manager_configure is defined
+    and
+    network_manager_configure == "cleanup"
