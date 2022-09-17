@@ -1,4 +1,6 @@
 ---
+# On CentOS 8 and Fedora >=29 like systems NetworkManager.
+# On CentOS 7 and Fedora <=28 like systems: NetworkManager-tui.
 
 network_manager_packages_install_list:
   - NetworkManager
@@ -7,11 +9,6 @@ network_manager_packages_install_list:
   # - nm-connection-editor
   # - libsemanage-python
   # - policycoreutils-python
-
-
-# On CentOS 8 and Fedora >=29 like systems NetworkManager.
-# On CentOS 7 and Fedora <=28 like systems: NetworkManager-tui.
-
 
 network_manager_packages_removals_list:
   - NetworkManager-initscripts-ifcfg-rh

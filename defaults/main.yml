@@ -28,3 +28,26 @@ network_manager_connections:
     method4: manual
     method6: link-local
     type: ethernet
+
+network_manager_conf:
+  main:
+    plugins: ""
+  logging:
+    level: INFO
+    domains: ALL
+
+network_manager_conf_defaults:
+  main:
+    plugins: keyfile
+  logging:
+    level: WARN
+    # domains: ALL
+
+network_manager_conf_d: []
+# network_manager_conf_d:
+#   - name: plugin-ifcfg-rh
+#     cfg:
+#       main:
+#         plugins: ifcfg-rh
+
+network_manager_service_name: NetworkManager

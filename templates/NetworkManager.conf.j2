@@ -1,0 +1,8 @@
+# {{ ansible_managed }}
+
+{% for section in cfg.items() %}
+[{{ section.0 }}]
+{% for option in section.1 | dictsort() %}
+{{option | join('=') }}
+{% endfor %}
+{% endfor %}

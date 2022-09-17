@@ -1,5 +1,5 @@
 ---
-- name: generate NetworkManager config
+- name: generate config
   block:
     - name: load task for packages
       include_tasks:
@@ -10,11 +10,15 @@
         file: tasks/sub-tasks/cleanup_old_systems.yml
       when: network_manager_cleanup_old_systems | bool
 
-    - name: start NetworkManager
+    - name: start service
       service:
-        name: NetworkManager
+        name: "{{ network_manager_service_name }}"
         state: started
         enabled: true
+
+    - name: load task for config
+      include_tasks:
+        file: tasks/sub-tasks/config.yml
 
     - name: load tasks for delete nm connection
       include_tasks:
@@ -46,7 +50,7 @@
     and
     network_manager_configure == "generate"
 
-- name: cleanup NetworkManager config
+- name: cleanup config
   block:
     - name: load task for clean conf nm
       include_tasks:

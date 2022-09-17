@@ -1,0 +1,47 @@
+---
+- name: create main configuration
+  template:
+    src: NetworkManager.conf.j2
+    dest: /etc/NetworkManager/NetworkManager.conf
+    owner: root
+    group: root
+    mode: 0644
+    trim_blocks: true
+    lstrip_blocks: true
+  vars:
+    cfg: "{{ network_manager_conf_defaults | combine(network_manager_conf, recursive=True) }}"
+
+- name: identify /etc/NetworkManager/conf.d/*.conf for cleanup
+  find:
+    paths: /etc/NetworkManager/conf.d/
+    patterns: "*.conf"
+  register: files_to_delete
+
+- name: cleanup /etc/NetworkManager/conf.d/*.conf
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"
+
+- name: create configurations in conf.d
+  template:
+    src: NetworkManager.conf.j2
+    dest: "/etc/NetworkManager/conf.d/{{ item.name }}.conf"
+    owner: root
+    group: root
+    mode: 0644
+    trim_blocks: true
+    lstrip_blocks: true
+  vars:
+    cfg: "{{ item.cfg }}"
+  loop: "{{ network_manager_conf_d | flatten }}"
+  when: >
+    network_manager_conf_d is iterable
+    and
+    network_manager_conf_d | length > 0
+
+- name: restart service
+  service:
+    name: "{{ network_manager_service_name }}"
+    state: restarted
+    enabled: true
