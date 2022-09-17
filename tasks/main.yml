@@ -1,38 +1,7 @@
 ---
-- name: load role metas
-  ansible.builtin.include_vars:
-    file: "meta/main.yml"
-
-- name: read role supported distributions
-  ansible.builtin.set_fact:
-    role_supported_distributions_list: >-
-      "{{ galaxy_info.platforms | json_query('[].name')
-      | string | default ('unknow') }}"
-
-- name: read role supported releases for this distribution
-  ansible.builtin.set_fact:
-    role_supported_releases_list: >-
-      "{{ (galaxy_info.platforms |
-      selectattr('name', 'match', ansible_distribution) |
-      list | first).versions | default ('unknow') | string }}"
-
-- name: read node distribution release
-  ansible.builtin.set_fact:
-    ansible_distribution_release: "{{ ansible_distribution_version | string }}"
-  when: ansible_distribution_release == ""
-
-- block:
-    - name: check if node distribution and release are supported
-      ansible.builtin.fail:
-        msg: >-
-          "{{ ansible_distribution }}/{{ ansible_distribution_release }}
-           is not a supported by this role"
-    - name: exclude node with unsupported distribution and release
-      ansible.builtin.meta: end_host
-  when: >
-    ansible_distribution not in role_supported_distributions_list
-    or
-    ansible_distribution_release not in role_supported_releases_list
+- name: load role asserts
+  ansible.builtin.include_tasks:
+    file: tasks/asserts.yml
 
 - name: load role variables
   ansible.builtin.include_vars:
@@ -46,6 +15,7 @@
         - "defaults.yml"
       paths:
         - "vars"
+      skip: true
   loop_control:
     loop_var: included_vars
 
@@ -61,5 +31,6 @@
         - "defaults.yml"
       paths:
         - "tasks/distribution"
+      skip: true
   loop_control:
     loop_var: included_tasks

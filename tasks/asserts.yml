@@ -1,0 +1,32 @@
+---
+- name: load role metas
+  ansible.builtin.include_vars:
+    file: "meta/main.yml"
+
+- name: get role supported platforms
+  ansible.builtin.set_fact:
+    role_supported_distributions_list: >-
+      "{{ galaxy_info.platforms | json_query('[].name')
+      | string | default ('unknow') }}"
+    role_supported_releases_list: >-
+      "{{ (galaxy_info.platforms |
+      selectattr('name', 'match', ansible_distribution) |
+      list | first).versions | default ('unknow') | string }}"
+
+- name: get node platform
+  ansible.builtin.set_fact:
+    ansible_distribution_release: "{{ ansible_distribution_version | string }}"
+  when: ansible_distribution_release == ""
+
+- block:
+    - name: check if this role can be run on this node
+      ansible.builtin.fail:
+        msg: >-
+          "{{ ansible_distribution }}/{{ ansible_distribution_release }}
+           is not a supported by this role"
+    - name: exclude this node with unsupported platform
+      ansible.builtin.meta: end_host
+  when: >
+    ansible_distribution not in role_supported_distributions_list
+    or
+    ansible_distribution_release not in role_supported_releases_list
