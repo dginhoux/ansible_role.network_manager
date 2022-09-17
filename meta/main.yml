@@ -1,7 +1,7 @@
 ---
 galaxy_info:
-  role_name: fstab
-  description: configure fstab
+  role_name: network_manager
+  description: configure network_manager
   author: dginhoux
   company: ginhouxnet
   license: BSD
@@ -22,6 +22,6 @@ galaxy_info:
         - "7"
         - "8"
   galaxy_tags:
-    - fstab
+    - network_manager
 
 dependencies: []

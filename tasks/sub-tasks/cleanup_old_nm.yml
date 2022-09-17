@@ -6,11 +6,11 @@
   register: nmcli_files_to_delete
 
 - name: cleanup /etc/NetworkManager/system-connections/*.nmconnection
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{ nmcli_files_to_delete.files }}"
 
 - name: nmcli connection reload
-  shell:
+  ansible.builtin.shell:
     cmd: nmcli connection reload

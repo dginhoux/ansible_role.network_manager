@@ -7,12 +7,12 @@
         patterns: "*"
       register: netcfg_files_to_delete
     - name: cleanup /etc/network/interfaces.d/*
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ netcfg_files_to_delete.files }}"
     - name: create default /etc/network/interfaces
-      copy:
+      ansible.builtin.copy:
         dest: "/etc/network/interfaces"
         content: |
           # ansible_managed
@@ -29,7 +29,7 @@
         patterns: "ifcfg-*"
       register: ifcfg_files_to_delete
     - name: cleanup /etc/network/interfaces.d/ifcfg-*
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ ifcfg_files_to_delete.files }}"
@@ -39,12 +39,12 @@
         patterns: "route-*"
       register: route_files_to_delete
     - name: cleanup /etc/network/interfaces.d/route-*
-      file:
+      ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ route_files_to_delete.files }}"
     - name: create default /etc/sysconfig/network
-      copy:
+      ansible.builtin.copy:
         dest: "/etc/sysconfig/network"
         content: |
           # ansible_managed

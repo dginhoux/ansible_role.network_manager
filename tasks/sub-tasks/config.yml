@@ -1,6 +1,6 @@
 ---
 - name: create main configuration
-  template:
+  ansible.builtin.template:
     src: NetworkManager.conf.j2
     dest: /etc/NetworkManager/NetworkManager.conf
     owner: root
@@ -18,13 +18,13 @@
   register: files_to_delete
 
 - name: cleanup /etc/NetworkManager/conf.d/*.conf
-  file:
+  ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
   with_items: "{{ files_to_delete.files }}"
 
 - name: create configurations in conf.d
-  template:
+  ansible.builtin.template:
     src: NetworkManager.conf.j2
     dest: "/etc/NetworkManager/conf.d/{{ item.name }}.conf"
     owner: root
@@ -41,7 +41,7 @@
     network_manager_conf_d | length > 0
 
 - name: restart service
-  service:
+  ansible.builtin.service:
     name: "{{ network_manager_service_name }}"
     state: restarted
     enabled: true

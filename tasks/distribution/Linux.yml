@@ -3,26 +3,26 @@
 - name: generate config
   block:
     - name: load task for packages
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/packages.yml
 
     - name: load task for clean old conf systems
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/cleanup_old_systems.yml
       when: network_manager_cleanup_old_systems | bool
 
     - name: start and enable service
-      service:
+      ansible.builtin.service:
         name: "{{ network_manager_service_name }}"
         state: started
         enabled: true
 
     - name: load task for config
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/config.yml
 
     - name: load tasks for delete nm connection
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/delete_nm_connections.yml
       loop: "{{ network_manager_connections | flatten }}"
       loop_control:
@@ -35,7 +35,7 @@
         conn.state == "absent"
 
     - name: load tasks for create nm connection
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/create_nm_connections.yml
       loop: "{{ network_manager_connections | flatten }}"
       loop_control:
@@ -55,11 +55,11 @@
 - name: cleanup config
   block:
     - name: load task for clean conf nm
-      include_tasks:
+      ansible.builtin.include_tasks:
         file: tasks/sub-tasks/cleanup_old_nm.yml
 
     - name: stop and disable service
-      service:
+      ansible.builtin.service:
         name: "{{ network_manager_service_name }}"
         state: stopped
         enabled: false

@@ -19,6 +19,7 @@ network_manager_configure: "generate"
 
 network_manager_cleanup_old_systems: true
 
+
 ## availables settings are listed here
 # https://docs.ansible.com/ansible/latest/collections/community/general/nmcli_module.html
 ##
@@ -44,6 +45,10 @@ network_manager_connections:
     method6: link-local
     type: ethernet
 
+
+##
+# https://people.freedesktop.org/~lkundrak/nm-docs/NetworkManager.conf.html
+##
 network_manager_conf:
   main:
     dns: none

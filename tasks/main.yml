@@ -1,41 +1,41 @@
 ---
 - name: load role metas
-  include_vars:
+  ansible.builtin.include_vars:
     file: "meta/main.yml"
 
 - name: read role supported distributions
-  set_fact:
+  ansible.builtin.set_fact:
     role_supported_distributions_list: >-
       "{{ galaxy_info.platforms | json_query('[].name')
       | string | default ('unknow') }}"
 
 - name: read role supported releases for this distribution
-  set_fact:
+  ansible.builtin.set_fact:
     role_supported_releases_list: >-
       "{{ (galaxy_info.platforms |
       selectattr('name', 'match', ansible_distribution) |
       list | first).versions | default ('unknow') | string }}"
 
 - name: read node distribution release
-  set_fact:
+  ansible.builtin.set_fact:
     ansible_distribution_release: "{{ ansible_distribution_version | string }}"
   when: ansible_distribution_release == ""
 
 - block:
     - name: check if node distribution and release are supported
-      fail:
+      ansible.builtin.fail:
         msg: >-
           "{{ ansible_distribution }}/{{ ansible_distribution_release }}
            is not a supported by this role"
     - name: exclude node with unsupported distribution and release
-      meta: end_host
+      ansible.builtin.meta: end_host
   when: >
     ansible_distribution not in role_supported_distributions_list
     or
     ansible_distribution_release not in role_supported_releases_list
 
 - name: load role variables
-  include_vars:
+  ansible.builtin.include_vars:
     file: "{{ included_vars }}"
   with_first_found:
     - files:
@@ -50,7 +50,7 @@
     loop_var: included_vars
 
 - name: load role tasks
-  include_tasks:
+  ansible.builtin.include_tasks:
     file: "{{ included_tasks }}"
   with_first_found:
     - files:
