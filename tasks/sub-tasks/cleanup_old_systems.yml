@@ -2,7 +2,7 @@
 - name: cleanup default debian network configuration
   block:
     - name: identify /etc/network/interfaces.d/* for cleanup
-      find:
+      ansible.builtin.find:
         paths: /etc/network/interfaces.d
         patterns: "*"
       register: netcfg_files_to_delete
@@ -24,7 +24,7 @@
 - name: cleanup default redhat network configuration
   block:
     - name: identify /etc/network/interfaces.d/ifcfg-* for cleanup
-      find:
+      ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "ifcfg-*"
       register: ifcfg_files_to_delete
@@ -34,7 +34,7 @@
         state: absent
       with_items: "{{ ifcfg_files_to_delete.files }}"
     - name: identify /etc/network/interfaces.d/route-* for cleanup
-      find:
+      ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "route-*"
       register: route_files_to_delete

@@ -12,7 +12,7 @@
     cfg: "{{ network_manager_conf_defaults | combine(network_manager_conf, recursive=True) }}"
 
 - name: identify /etc/NetworkManager/conf.d/*.conf for cleanup
-  find:
+  ansible.builtin.find:
     paths: /etc/NetworkManager/conf.d/
     patterns: "*.conf"
   register: files_to_delete

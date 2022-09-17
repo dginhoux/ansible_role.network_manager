@@ -1,6 +1,6 @@
 ---
 - name: identify /etc/NetworkManager/system-connections/*.nmconnection for cleanup
-  find:
+  ansible.builtin.find:
     paths: /etc/NetworkManager/system-connections/
     patterns: "*.nmconnection"
   register: nmcli_files_to_delete
