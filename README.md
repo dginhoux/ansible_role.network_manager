@@ -43,6 +43,20 @@ network_manager_connections:
     method4: manual
     method6: link-local
     type: ethernet
+
+network_manager_conf:
+  main:
+    dns: none
+    rc-manager: unmanaged
+  logging:
+    level: INFO
+
+network_manager_conf_d: []
+# network_manager_conf_d:
+#   - name: plugin-ifcfg-rh
+#     cfg:
+#       main:
+#         plugins: ifcfg-rh
 ```
 
 

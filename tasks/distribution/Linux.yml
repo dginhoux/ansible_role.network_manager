@@ -1,4 +1,5 @@
 ---
+
 - name: generate config
   block:
     - name: load task for packages
@@ -10,7 +11,7 @@
         file: tasks/sub-tasks/cleanup_old_systems.yml
       when: network_manager_cleanup_old_systems | bool
 
-    - name: start service
+    - name: start and enable service
       service:
         name: "{{ network_manager_service_name }}"
         state: started
@@ -50,11 +51,18 @@
     and
     network_manager_configure == "generate"
 
+
 - name: cleanup config
   block:
     - name: load task for clean conf nm
       include_tasks:
         file: tasks/sub-tasks/cleanup_old_nm.yml
+
+    - name: stop and disable service
+      service:
+        name: "{{ network_manager_service_name }}"
+        state: stopped
+        enabled: false
   when: >
     network_manager_configure is defined
     and
