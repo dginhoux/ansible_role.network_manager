@@ -7,11 +7,11 @@
   ansible.builtin.set_fact:
     role_supported_distributions_list: >-
       "{{ galaxy_info.platforms | json_query('[].name')
-      | string | default ('unknow') }}"
+      | string | default ('none') | lower }}"
     role_supported_releases_list: >-
       "{{ (galaxy_info.platforms |
       selectattr('name', 'match', ansible_distribution) |
-      list | first).versions | default ('unknow') | string }}"
+      list | first).versions | default ('none') | lower | string }}"
 
 - name: get node platform
   ansible.builtin.set_fact:
@@ -27,6 +27,10 @@
     - name: exclude this node with unsupported platform
       ansible.builtin.meta: end_host
   when: >
-    ansible_distribution not in role_supported_distributions_list
+    ansible_distribution | lower not in role_supported_distributions_list
     or
-    ansible_distribution_release not in role_supported_releases_list
+    (
+      ansible_distribution_release | lower not in role_supported_releases_list
+      and
+      'all' not in role_supported_releases_list | lower
+    )
