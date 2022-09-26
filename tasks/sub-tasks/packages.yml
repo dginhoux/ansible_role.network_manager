@@ -1,14 +1,7 @@
 ---
 
-- name: remove needed packages
+- name: manage needed packages
   ansible.builtin.package:
-    name: "{{ item }}"
-    state: absent
-  loop: "{{ network_manager_packages_removals_list | flatten }}"
-
-
-- name: install needed packages
-  ansible.builtin.package:
-    name: "{{ item }}"
-    state: present
-  loop: "{{ network_manager_packages_install_list | flatten }}"
+    name: "{{ item.name }}"
+    state: "{{ item.state }}"
+  loop: "{{ network_manager_packages_list | flatten }}"

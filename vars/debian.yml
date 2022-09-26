@@ -1,9 +1,5 @@
 ---
-network_manager_packages_install_list:
-  - network-manager
-  # - NetworkManager-libnm
-  # - nm-connection-editor
-  # - libsemanage-python
-  # - policycoreutils-python
 
-network_manager_packages_removals_list: []
+network_manager_packages_list:
+  - name: network-manager
+    state: present

@@ -1,18 +1,69 @@
-Ansible Role : dginhoux.network_manager
-=========
-
-This ansible role configure network connections with NetworkMaanger
+# ROLE dginhoux.network_manager
 
 
-Requirements
-------------
 
-This role require a supported platform defined in `meta/main.yml`.
-It will skip node with unsupported platform ; this behaviour can be bypassed by settings this variable `asserts_bypass=True`.
+## DESCRIPTION
+
+This ansible role configure network connections with NetworkMaanger.
 
 
-Role Variables
---------------
+
+## REQUIREMENTS
+
+#### SUPPORTED PLATFORMS
+
+This role require a supported platform.<br />
+It will skip node with unsupported platform to avoid any compatibility problem.<br />
+This behaviour can be bypassed by settings the following variable `asserts_bypass=True`.
+
+| Platform | Versions |
+|----------|----------|
+| Debian | buster, bullseye |
+| Fedora | 33, 34, 35, 36 |
+| EL | 7, 8 |
+
+#### ANSIBLE VERSION
+
+Ansible >= 2.12
+
+#### DEPENDENCIES
+
+None.
+
+
+
+## INSTALLATION
+
+#### ANSIBLE GALAXY
+
+```shell
+ansible-galaxy install dginhoux.git_repos
+```
+#### GIT
+
+```shell
+git clone https://github.com/dginhoux/ansible_role.network_manager dginhoux.network_manager
+```
+
+
+## USAGE
+
+#### EXAMPLE PLAYBOOK
+
+```yaml
+- hosts: all
+  roles:
+    - name: start role dginhoux.network_manager
+      ansible.builtin.include_role:
+        name: dginhoux.network_manager
+```
+
+
+## VARIABLES
+
+#### DEFAULT VARIABLES
+
+Defaults variables defined in `defaults/main.yml` : 
 
 ```yaml
 network_manager_configure: "generate"
@@ -46,7 +97,6 @@ network_manager_connections:
     method6: link-local
     type: ethernet
 
-
 ##
 # https://people.freedesktop.org/~lkundrak/nm-docs/NetworkManager.conf.html
 ##
@@ -57,34 +107,55 @@ network_manager_conf:
   logging:
     level: INFO
 
+
+network_manager_conf_defaults:
+  main:
+    plugins: keyfile
+  logging:
+    level: WARN
+    # domains: ALL
+
 network_manager_conf_d: []
 # network_manager_conf_d:
 #   - name: plugin-ifcfg-rh
 #     cfg:
 #       main:
 #         plugins: ifcfg-rh
+
+
+network_manager_service_name: NetworkManager
+```
+
+#### DEFAULT OS SPECIFIC VARIABLES
+
+Those variables files are located in `vars/*.yml` are used to handle OS differences.<br />
+One of theses is loaded dynamically during role runtime using the `include_vars` module and set OS specifics variable's.
+
+* RedHat Family 
+
+```yaml
+network_manager_packages_list:
+  - name: NetworkManager
+    state: present
+  - name: NetworkManager-initscripts-ifcfg-rh
+    state: absent
+```
+
+* Debian Family 
+
+```yaml
+network_manager_packages_list:
+  - name: network-manager
+    state: present
 ```
 
 
+## AUTHOR
 
-Dependencies
-------------
-
-none
-
-
-Example Playbook
-----------------
+Dany GINHOUX - https://github.com/dginhoux
 
 
 
-License
--------
+## LICENSE
 
-BSD
-
-
-Author Information
-------------------
-
-https://github.com/dginhoux/
+MIT
