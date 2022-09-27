@@ -1,7 +1,7 @@
 ---
 galaxy_info:
   role_name: network_manager
-  description: configure network_manager
+  description: dginhoux.network_manager
   author: Dany GINHOUX
   company: dginhoux
   license: MIT
@@ -23,5 +23,6 @@ galaxy_info:
         - "8"
   galaxy_tags:
     - network_manager
+    - nmcli
 
 dependencies: []
