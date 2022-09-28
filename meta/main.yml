@@ -1,7 +1,8 @@
 ---
 galaxy_info:
   role_name: network_manager
-  description: dginhoux.network_manager
+  description: |
+    This ansible role configure network connections with NetworkMaanger.
   author: Dany GINHOUX
   company: dginhoux
   license: MIT
