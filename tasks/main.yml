@@ -1,10 +1,10 @@
 ---
-- name: load role asserts
+- name: Load role asserts
   ansible.builtin.include_tasks:
     file: tasks/asserts.yml
   when: asserts_bypass is not defined or not asserts_bypass
 
-- name: load role variables
+- name: Load role variables
   ansible.builtin.include_vars:
     file: "{{ included_vars }}"
   with_first_found:
@@ -20,7 +20,7 @@
   loop_control:
     loop_var: included_vars
 
-- name: load role tasks
+- name: Load role tasks
   ansible.builtin.include_tasks:
     file: "{{ included_tasks }}"
   with_first_found:
