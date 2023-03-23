@@ -19,7 +19,7 @@ This behaviour can be bypassed by settings the following variable `asserts_bypas
 | Platform | Versions |
 |----------|----------|
 | Debian | buster, bullseye |
-| Fedora | 33, 34, 35, 36 |
+| Fedora | 33, 34, 35, 36, 37 |
 | EL | 7, 8 |
 
 #### ANSIBLE VERSION
