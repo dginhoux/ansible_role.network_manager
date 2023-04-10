@@ -24,7 +24,7 @@ This behaviour can be bypassed by settings the following variable `asserts_bypas
 
 #### ANSIBLE VERSION
 
-Ansible >= 2.12
+Ansible >= 2.13
 
 #### DEPENDENCIES
 
