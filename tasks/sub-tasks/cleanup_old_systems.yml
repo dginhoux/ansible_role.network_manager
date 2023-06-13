@@ -1,16 +1,19 @@
 ---
 - name: cleanup default debian network configuration
+  when: ansible_os_family == "Debian"
   block:
     - name: identify /etc/network/interfaces.d/* for cleanup
+      register: netcfg_files_to_delete
       ansible.builtin.find:
         paths: /etc/network/interfaces.d
         patterns: "*"
-      register: netcfg_files_to_delete
+
     - name: cleanup /etc/network/interfaces.d/*
+      with_items: "{{ netcfg_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
-      with_items: "{{ netcfg_files_to_delete.files }}"
+
     - name: create default /etc/network/interfaces
       ansible.builtin.copy:
         dest: "/etc/network/interfaces"
@@ -19,30 +22,35 @@
           auto lo
           iface lo inet loopback
           source /etc/network/interfaces.d/*
-  when: ansible_os_family == "Debian"
+
 
 - name: cleanup default redhat network configuration
+  when: ansible_os_family == "RedHat"
   block:
     - name: identify /etc/network/interfaces.d/ifcfg-* for cleanup
+      register: ifcfg_files_to_delete
       ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "ifcfg-*"
-      register: ifcfg_files_to_delete
+
     - name: cleanup /etc/network/interfaces.d/ifcfg-*
+      with_items: "{{ ifcfg_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
-      with_items: "{{ ifcfg_files_to_delete.files }}"
+
     - name: identify /etc/network/interfaces.d/route-* for cleanup
+      register: route_files_to_delete
       ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "route-*"
-      register: route_files_to_delete
+
     - name: cleanup /etc/network/interfaces.d/route-*
+      with_items: "{{ route_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
-      with_items: "{{ route_files_to_delete.files }}"
+
     - name: create default /etc/sysconfig/network
       ansible.builtin.copy:
         dest: "/etc/sysconfig/network"
@@ -51,4 +59,3 @@
           NETWORKING=yes
           HOSTNAME={{ inventory_hostname }}
           NOZEROCONF=yes
-  when: ansible_os_family == "RedHat"

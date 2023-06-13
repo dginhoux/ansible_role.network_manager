@@ -1,10 +1,14 @@
 ---
 
 - name: Load role metas
+  tags:
+    - compatibility
   ansible.builtin.include_vars:
     file: "meta/main.yml"
 
 - name: Get role supported platforms
+  tags:
+    - compatibility
   ansible.builtin.set_fact:
     role_supported_distributions_list: >-
       "{{ galaxy_info.platforms | json_query('[].name')
@@ -15,11 +19,15 @@
       list | first).versions | default('none') | lower | string }}"
 
 - name: Get node platform
+  tags:
+    - compatibility
   ansible.builtin.set_fact:
     ansible_distribution_release: "{{ ansible_distribution_version | string }}"
   when: ansible_distribution_release == ""
 
 - name: Exclude node
+  tags:
+    - compatibility
   when: >
     ansible_distribution | lower not in role_supported_distributions_list
     or

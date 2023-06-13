@@ -1,10 +1,14 @@
 ---
 - name: Load role asserts
+  tags:
+    - compatibility
   ansible.builtin.include_tasks:
     file: tasks/compatibility.yml
   when: skip_check_platform_compatibility is not defined or not skip_check_platform_compatibility
 
 - name: Load role variables
+  tags:
+    - vars
   ansible.builtin.include_vars:
     file: "{{ included_vars }}"
   with_first_found:
@@ -21,6 +25,8 @@
     loop_var: included_vars
 
 - name: Load role tasks
+  tags:
+    - tasks
   ansible.builtin.include_tasks:
     file: "{{ included_tasks }}"
   with_first_found:

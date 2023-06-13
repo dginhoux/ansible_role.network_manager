@@ -1,15 +1,18 @@
 ---
 
 - name: generate config
+  when:
+    - network_manager_configure is defined
+    - network_manager_configure == "generate"
   block:
     - name: load task for packages
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/packages.yml
 
     - name: load task for clean old conf systems
+      when: network_manager_cleanup_old_systems | bool
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/cleanup_old_systems.yml
-      when: network_manager_cleanup_old_systems | bool
 
     - name: start and enable service
       ansible.builtin.service:
@@ -22,37 +25,32 @@
         file: tasks/sub-tasks/config.yml
 
     - name: load tasks for delete nm connection
+      when:
+        - network_manager_connections is iterable
+        - network_manager_connections | length > 0
+        - conn.state == "absent"
+      loop: "{{ network_manager_connections | flatten }}"
+      loop_control:
+        loop_var: conn
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/delete_nm_connections.yml
-      loop: "{{ network_manager_connections | flatten }}"
-      loop_control:
-        loop_var: conn
-      when: >
-        network_manager_connections is iterable
-        and
-        network_manager_connections | length > 0
-        and
-        conn.state == "absent"
 
     - name: load tasks for create nm connection
-      ansible.builtin.include_tasks:
-        file: tasks/sub-tasks/create_nm_connections.yml
+      when:
+        - network_manager_connections is iterable
+        - network_manager_connections | length > 0
+        - conn.state == "present"
       loop: "{{ network_manager_connections | flatten }}"
       loop_control:
         loop_var: conn
-      when: >
-        network_manager_connections is iterable
-        and
-        network_manager_connections | length > 0
-        and
-        conn.state == "present"
-  when: >
-    network_manager_configure is defined
-    and
-    network_manager_configure == "generate"
+      ansible.builtin.include_tasks:
+        file: tasks/sub-tasks/create_nm_connections.yml
 
 
 - name: cleanup config
+  when:
+    - network_manager_configure is defined
+    - network_manager_configure == "cleanup"
   block:
     - name: load task for clean conf nm
       ansible.builtin.include_tasks:
@@ -63,7 +61,3 @@
         name: "{{ network_manager_service_name }}"
         state: stopped
         enabled: false
-  when: >
-    network_manager_configure is defined
-    and
-    network_manager_configure == "cleanup"

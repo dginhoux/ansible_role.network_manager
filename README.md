@@ -14,7 +14,7 @@ This ansible role configure network connections with NetworkMaanger.
 
 This role require a supported platform.<br />
 It will skip node with unsupported platform to avoid any compatibility problem.<br />
-This behaviour can be bypassed by settings the following variable `skip_check_platform_compatibility=True`.
+This behaviour can be bypassed by settings the following variable `skip_check_platform_compatibility=true`.
 
 | Platform | Versions |
 |----------|----------|

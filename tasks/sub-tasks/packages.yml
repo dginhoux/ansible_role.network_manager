@@ -1,7 +1,7 @@
 ---
 
 - name: manage needed packages
+  loop: "{{ network_manager_packages_list | flatten }}"
   ansible.builtin.package:
     name: "{{ item.name }}"
     state: "{{ item.state }}"
-  loop: "{{ network_manager_packages_list | flatten }}"
