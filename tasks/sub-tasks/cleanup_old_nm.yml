@@ -12,5 +12,5 @@
     state: absent
 
 - name: nmcli connection reload
-  ansible.builtin.shell:
+  ansible.builtin.command:
     cmd: nmcli connection reload
