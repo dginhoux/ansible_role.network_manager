@@ -1,10 +1,12 @@
 ---
-- name: Load role asserts
+- name: Check role compatibility
+  when:
+    - check_compatibility is defined
+    - check_compatibility
   tags:
     - compatibility
   ansible.builtin.include_tasks:
     file: tasks/compatibility.yml
-  when: skip_check_platform_compatibility is not defined or not skip_check_platform_compatibility
 
 - name: Load role variables
   tags:

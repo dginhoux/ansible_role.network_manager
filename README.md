@@ -12,15 +12,16 @@ This ansible role configure network connections with NetworkMaanger.
 
 #### SUPPORTED PLATFORMS
 
-This role require a supported platform.<br />
-It will skip node with unsupported platform to avoid any compatibility problem.<br />
-This behaviour can be bypassed by settings the following variable `skip_check_platform_compatibility=true`.
+This role is tested on the following platforms.<br />
 
 | Platform | Versions |
 |----------|----------|
-| Debian | buster, bullseye |
+| Debian | buster, bullseye, bookworm |
 | Fedora | 33, 34, 35, 36, 37, 38 |
 | EL | 7, 8 |
+
+You can set this variable `check_compatibility` to let the role skip nodes with unsupporteds platforms to avoid any compatibility problems.<br />
+
 
 #### ANSIBLE VERSION
 
