@@ -1,13 +1,4 @@
 ---
-- name: Check role compatibility
-  when:
-    - check_compatibility is defined
-    - check_compatibility
-  tags:
-    - compatibility
-  ansible.builtin.include_tasks:
-    file: tasks/compatibility.yml
-
 - name: Load role variables
   tags:
     - vars
