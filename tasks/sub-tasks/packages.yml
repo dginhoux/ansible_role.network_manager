@@ -1,6 +1,7 @@
 ---
 
 - name: manage needed packages
+  become: true
   loop: "{{ network_manager_packages_list | flatten }}"
   ansible.builtin.package:
     name: "{{ item.name }}"

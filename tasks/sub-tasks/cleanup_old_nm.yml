@@ -1,16 +1,19 @@
 ---
 - name: identify /etc/NetworkManager/system-connections/*.nmconnection for cleanup
+  become: true
   register: nmcli_files_to_delete
   ansible.builtin.find:
     paths: /etc/NetworkManager/system-connections/
     patterns: "*.nmconnection"
 
 - name: cleanup /etc/NetworkManager/system-connections/*.nmconnection
+  become: true
   with_items: "{{ nmcli_files_to_delete.files }}"
   ansible.builtin.file:
     path: "{{ item.path }}"
     state: absent
 
 - name: nmcli connection reload
+  become: true
   ansible.builtin.command:
     cmd: nmcli connection reload
