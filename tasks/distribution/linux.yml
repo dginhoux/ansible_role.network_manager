@@ -1,31 +1,31 @@
 ---
 
-- name: generate config
+- name: Generate config
   when:
     - network_manager_configure is defined
     - network_manager_configure == "generate"
   block:
-    - name: load task for packages
+    - name: Load task for packages
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/packages.yml
 
-    - name: load task for clean old conf systems
+    - name: Load task for clean old conf systems
       when: network_manager_cleanup_old_systems | bool
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/cleanup_old_systems.yml
 
-    - name: start and enable service
+    - name: Start and enable service
       become: true
       ansible.builtin.service:
         name: "{{ network_manager_service_name }}"
         state: started
         enabled: true
 
-    - name: load task for config
+    - name: Load task for config
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/config.yml
 
-    - name: load tasks for delete nm connection
+    - name: Load tasks for delete nm connection
       when:
         - network_manager_connections is iterable
         - network_manager_connections | length > 0
@@ -36,7 +36,7 @@
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/delete_nm_connections.yml
 
-    - name: load tasks for create nm connection
+    - name: Load tasks for create nm connection
       when:
         - network_manager_connections is iterable
         - network_manager_connections | length > 0
@@ -48,16 +48,16 @@
         file: tasks/sub-tasks/create_nm_connections.yml
 
 
-- name: cleanup config
+- name: Cleanup config
   when:
     - network_manager_configure is defined
     - network_manager_configure == "cleanup"
   block:
-    - name: load task for clean conf nm
+    - name: Load task for clean conf nm
       ansible.builtin.include_tasks:
         file: tasks/sub-tasks/cleanup_old_nm.yml
 
-    - name: stop and disable service
+    - name: Stop and disable service
       become: true
       ansible.builtin.service:
         name: "{{ network_manager_service_name }}"

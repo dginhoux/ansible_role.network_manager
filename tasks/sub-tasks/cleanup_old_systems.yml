@@ -1,22 +1,22 @@
 ---
-- name: cleanup default debian network configuration
+- name: Cleanup default debian network configuration
   when: ansible_os_family == "Debian"
   block:
-    - name: identify /etc/network/interfaces.d/* for cleanup
+    - name: Identify /etc/network/interfaces.d/* for cleanup
       become: true
       register: netcfg_files_to_delete
       ansible.builtin.find:
         paths: /etc/network/interfaces.d
         patterns: "*"
 
-    - name: cleanup /etc/network/interfaces.d/*
+    - name: Cleanup /etc/network/interfaces.d/*
       become: true
       with_items: "{{ netcfg_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
 
-    - name: create default /etc/network/interfaces
+    - name: Create default /etc/network/interfaces
       become: true
       ansible.builtin.copy:
         dest: "/etc/network/interfaces"
@@ -27,38 +27,38 @@
           source /etc/network/interfaces.d/*
 
 
-- name: cleanup default redhat network configuration
+- name: Cleanup default redhat network configuration
   when: ansible_os_family == "RedHat"
   block:
-    - name: identify /etc/network/interfaces.d/ifcfg-* for cleanup
+    - name: Identify /etc/network/interfaces.d/ifcfg-* for cleanup
       become: true
       register: ifcfg_files_to_delete
       ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "ifcfg-*"
 
-    - name: cleanup /etc/network/interfaces.d/ifcfg-*
+    - name: Cleanup /etc/network/interfaces.d/ifcfg-*
       become: true
       with_items: "{{ ifcfg_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
 
-    - name: identify /etc/network/interfaces.d/route-* for cleanup
+    - name: Identify /etc/network/interfaces.d/route-* for cleanup
       become: true
       register: route_files_to_delete
       ansible.builtin.find:
         paths: /etc/sysconfig/network-scripts
         patterns: "route-*"
 
-    - name: cleanup /etc/network/interfaces.d/route-*
+    - name: Cleanup /etc/network/interfaces.d/route-*
       become: true
       with_items: "{{ route_files_to_delete.files }}"
       ansible.builtin.file:
         path: "{{ item.path }}"
         state: absent
 
-    - name: create default /etc/sysconfig/network
+    - name: Create default /etc/sysconfig/network
       become: true
       ansible.builtin.copy:
         dest: "/etc/sysconfig/network"

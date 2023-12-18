@@ -1,6 +1,6 @@
 ---
 
-- name: "create nm connection {{ conn.conn_name }}"
+- name: "Create nm connection {{ conn.conn_name }}"
   become: true
   community.general.nmcli:
     addr_gen_mode6: "{{ conn.addr_gen_mode6 | default(omit) }}"
