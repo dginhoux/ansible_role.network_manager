@@ -48,9 +48,10 @@ git clone https://github.com/dginhoux/ansible_role.network_manager dginhoux.netw
 #### EXAMPLE PLAYBOOK
 
 ```yaml
-- hosts: all
+- name: Playbook
+  hosts: all
   roles:
-    - name: start role dginhoux.network_manager
+    - name: Start role dginhoux.network_manager
       ansible.builtin.include_role:
         name: dginhoux.network_manager
 ```
@@ -60,7 +61,10 @@ git clone https://github.com/dginhoux/ansible_role.network_manager dginhoux.netw
 
 #### DEFAULT VARIABLES
 
-Defaults variables defined in `defaults/main.yml` : 
+Defaults variables defined in `defaults/main.yml`
+
+#### EXAMPLES VARIABLES
+
 
 ```yaml
 network_manager_configure: "generate"
